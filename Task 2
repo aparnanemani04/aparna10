@@ -1,0 +1,45 @@
+from PIL import Image
+
+def encrypt_image(input_image_path, output_image_path, key):
+  """Encrypts an image using pixel manipulation.
+
+  Args:
+    input_image_path: Path to the input image.
+    output_image_path: Path to save the encrypted image.
+    key: A numerical key for encryption.
+  """
+
+  image = Image.open(input_image_path)
+  pixels = image.load()
+
+  width, height = image.size
+
+  for i in range(width):
+    for j in range(height):
+      r, g, b = pixels[i, j]
+      # Simple encryption: XOR with key
+      pixels[i, j] = (r ^ key, g ^ key, b ^ key)
+
+  image.save(output_image_path)
+
+def decrypt_image(input_image_path, output_image_path, key):
+  """Decrypts an image using pixel manipulation.
+
+  Args:
+    input_image_path: Path to the encrypted image.
+    output_image_path: Path to save the decrypted image.
+    key: The same numerical key used for encryption.
+  """
+
+  image = Image.open(input_image_path)
+  pixels = image.load()
+
+  width, height = image.size
+
+  for i in range(width):
+    for j in range(height):
+      r, g, b = pixels[i, j]
+      # Decryption is the same as encryption with XOR
+      pixels[i, j] = (r ^ key, g ^ key, b ^ key)
+
+  image.save(output_image_path)
