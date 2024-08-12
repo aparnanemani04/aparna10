@@ -1,0 +1,33 @@
+from scapy.all import sniff, IP, TCP, UDP
+import datetime
+
+def packet_callback(packet):
+    """Callback function to process each captured packet."""
+    if IP in packet:
+        ip_src = packet[IP].src
+        ip_dst = packet[IP].dst
+        protocol = packet[IP].proto
+        payload = packet.payload
+
+        # Display the packet details
+        print(f"Time: {datetime.datetime.now()}")
+        print(f"Source IP: {ip_src}")
+        print(f"Destination IP: {ip_dst}")
+        print(f"Protocol: {protocol}")
+
+        if protocol == 6:  # TCP
+            print(f"Payload (TCP): {payload.summary()}")
+        elif protocol == 17:  # UDP
+            print(f"Payload (UDP): {payload.summary()}")
+        else:
+            print(f"Payload (Other): {payload.summary()}")
+        
+        print("-" * 50)
+
+def main():
+    print("Starting packet sniffer...")
+    # Sniff packets indefinitely
+    sniff(prn=packet_callback, store=0)
+
+if __name__ == "__main__":
+    main()
